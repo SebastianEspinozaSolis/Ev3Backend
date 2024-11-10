@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Añadir Reseña{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Añadir Reseña para {{ publicacion.titulo }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Enviar Reseña</button>
+    </form>
+    <a href="{% url 'articulos:detalle_publicacion' publicacion.pk %}" class="btn btn-secondary mt-3">Volver al Detalle de la Publicación</a>
+</div>
+{% endblock %}
+

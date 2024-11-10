@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Publicaciones{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mis Publicaciones</h2>
+
+    {% if publicaciones %}
+        <div class="list-group">
+            {% for publicacion in publicaciones %}
+                <div class="list-group-item">
+                    <h5>{{ publicacion.titulo }}</h5>
+                    <p>{{ publicacion.descripcion }}</p>
+                    <a href="{% url 'articulos:detalle_publicacion' publicacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No tienes publicaciones en este momento.</p>
+    {% endif %}
+</div>
+{% endblock %}

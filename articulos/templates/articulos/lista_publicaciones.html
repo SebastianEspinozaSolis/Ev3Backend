@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Publicaciones{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Publicaciones</h2>
+    {% if request.user.is_authenticated %}
+        {% if request.user.perfil.rol == 'vendedor' or request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'articulos:crear_publicacion' %}" class="btn btn-success mb-3">Crear Publicacion </a>
+        {% endif %}
+    {% endif %}
+    <div class="row">
+    {% for publicacion in publicaciones %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img src="{{ publicacion.imagen.url }}" class="img-fluid mb-4" alt="{{ publicacion.titulo }}" style="max-width: 200px; max-height: 200px;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ publicacion.titulo }}</h5>
+                        <a href="{% url 'articulos:detalle_publicacion' publicacion.pk %}" class="btn btn-primary">Ver Detalle</a>
+                    </div>
+                </div>
+            </div>
+    
+    {% empty %}
+        <p>No hay publicaciones disponibles.</p>
+    {% endfor %}
+    </div>
+    {{ request.user.perfil.rol }}
+</div>
+{% endblock %}

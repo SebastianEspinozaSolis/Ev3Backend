@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Reseña{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Editar Reseña</h1>
+
+        <p><strong>Publicación:</strong> {{ reseña.publicacion.titulo }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_contenido">Contenido de la Reseña:</label>
+                {{ form.contenido }}
+            </div>
+            <div class="form-group">
+                <label for="id_calificacion">Calificación:</label>
+                {{ form.calificacion }}
+            </div>
+            <button type="submit" class="btn btn-success">Actualizar Reseña</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Reseñas{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Mis Reseñas</h1>
+        {% if reseñas %}
+            <ul class="list-group">
+                {% for reseña in reseñas %}
+                    <li class="list-group-item">
+                        <h5>Publicación: {{ reseña.publicacion.titulo }}</h5>
+                        <p><strong>Calificación:</strong> {{ reseña.get_calificacion_display }}</p>
+                        <p>{{ reseña.contenido }}</p>
+                        <a href="{% url 'reseñas:editar_reseña' reseña.pk %}" class="btn btn-warning btn-sm">Editar Reseña</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No has dejado ninguna reseña aún.</p>
+        {% endif %}
+    </div>
+{% endblock %}

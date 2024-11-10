@@ -1,0 +1,43 @@
+<!-- en detalle_publicacion.html de la app articulos -->
+
+{% extends 'base.html' %}
+
+{% block title %}{{ publicacion.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ publicacion.titulo }}</h2>
+    <p><small class="text-muted">Publicado por {{ publicacion.vendedor.username }} el {{ publicacion.fecha_publicacion|date:"d/m/Y H:i" }}</small></p>
+    <hr>
+    <img src="{{ publicacion.imagen.url }}" class="img-fluid mb-4" alt="{{ publicacion.titulo }}">
+    <p>{{ publicacion.descripcion }}</p>
+
+    {% if request.user.is_authenticated and request.user == publicacion.vendedor %}
+        <a href="{% url 'articulos:editar_publicacion' publicacion.pk %}" class="btn btn-secondary">Editar Publicacion</a>
+    {% endif %}
+
+    <!-- Mostrar reseñas -->
+    <h3>Reseñas</h3>
+    {% if publicacion.reseñas.all %}
+        <ul>
+            {% for reseña in publicacion.reseñas.all %}
+                <li>
+                    <strong>{{ reseña.usuario.username }}:</strong> 
+                    {{ reseña.contenido }} <br>
+                    Calificación: {{ reseña.calificacion }} estrella{% if reseña.calificacion > 1 %}s{% endif %}
+                    <br><small>{{ reseña.fecha_resena|date:"d/m/Y H:i" }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay reseñas aún.</p>
+    {% endif %}
+
+    <!-- Botón para agregar reseña solo si el usuario no ha dejado una reseña -->
+    {% if request.user.is_authenticated and not usuario_reseño and request.user.perfil.rol == 'comprador' %}
+        <a href="{% url 'reseñas:crear_reseña' publicacion.pk %}" class="btn btn-primary">Añadir Reseña</a>
+    {% endif %}
+
+    <a href="{% url 'articulos:lista_publicaciones' %}" class="btn btn-link mt-3">Volver a la Lista de Publicaciones</a>
+</div>
+{% endblock %}

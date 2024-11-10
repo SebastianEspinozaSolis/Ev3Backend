@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Lista de Usuarios</h1>
+
+    <!-- Filtro por rol -->
+    <form method="get" action="{% url 'usuarios:lista_usuarios' %}">
+        <div class="form-group">
+            <label for="rol">Filtrar por rol</label>
+            <select name="rol" id="rol" class="form-control">
+                <option value="">-- Seleccionar Rol --</option>
+                <option value="administrador" {% if rol == 'administrador' %}selected{% endif %}>Administrador</option>
+                <option value="vendedor" {% if rol == 'vendedor' %}selected{% endif %}>Vendedor</option>
+                <option value="comprador" {% if rol == 'comprador' %}selected{% endif %}>Comprador</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    <!-- Tabla de usuarios -->
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Correo Electrónico</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.perfil.nombre }}</td>
+                    <td>{{ usuario.perfil.rol }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
