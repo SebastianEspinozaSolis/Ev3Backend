@@ -19,6 +19,11 @@
             {{ form.descripcion }}
         </div>
         <div class="form-group">
+            <label for="id_costo">Costo:</label>
+            {{ form.costo.errors }}
+            {{ form.costo }}
+        </div>
+        <div class="form-group">
             <label for="id_imagen">Imagen Actual:</label><br>
             <img src="{{ publicacion.imagen.url }}" class="img-thumbnail mb-2" width="200" alt="{{ publicacion.titulo }}">
             <label for="id_imagen">Cambiar Imagen (opcional):</label>

@@ -19,6 +19,11 @@
             {{ form.descripcion }}
         </div>
         <div class="form-group">
+            <label for="id_costo">Costo:</label>
+            {{ form.costo.errors }}
+            {{ form.costo }}
+        </div>
+        <div class="form-group">
             <label for="id_imagen">Seleccionar Imagen:</label>
             {{ form.imagen.errors }}
             {{ form.imagen }}

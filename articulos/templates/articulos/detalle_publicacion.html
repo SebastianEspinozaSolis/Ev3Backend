@@ -8,6 +8,7 @@
 <div class="container mt-4">
     <h2>{{ publicacion.titulo }}</h2>
     <p><small class="text-muted">Publicado por {{ publicacion.vendedor.username }} el {{ publicacion.fecha_publicacion|date:"d/m/Y H:i" }}</small></p>
+    <p><strong>Costo:</strong> ${{ publicacion.costo }}</p>
     <hr>
     <img src="{{ publicacion.imagen.url }}" class="img-fluid mb-4" alt="{{ publicacion.titulo }}">
     <p>{{ publicacion.descripcion }}</p>
