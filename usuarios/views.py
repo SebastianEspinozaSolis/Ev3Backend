@@ -46,10 +46,10 @@ def lista_usuarios(request):
     # Obtener los usuarios con su perfil
     usuarios = User.objects.all()
 
-    # Filtrar según el rol seleccionado (si se proporciona)
+    # Filtrar según el rol seleccionado
     rol = request.GET.get('rol')
     if rol:
         usuarios = usuarios.filter(perfil__rol=rol)
 
-    # Pasar los usuarios al contexto de la plantilla
+    # Pasar los usuarios a html
     return render(request, 'usuarios/lista_usuarios.html', {'usuarios': usuarios, 'rol': rol})    
