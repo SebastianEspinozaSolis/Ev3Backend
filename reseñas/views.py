@@ -54,3 +54,41 @@ def editar_reseña(request, pk):
         'form': form,
         'reseña': reseña
     })
+  
+from .serializers import ReseñaSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+#get ver, post crear, put creo que es actualizar, delete borrar
+@api_view(['GET','POST'])
+def reseñas_api(request):
+    if request.method=="GET":#Respuesta para mostrar todos los registros
+        reseñas=Reseña.objects.all()
+        serializer=ReseñaSerializer(reseñas,many=True)
+        return Response(serializer.data)
+    
+    elif request.method=="POST":#Al agregar solicitud es con POST
+        serializer=ReseñaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+#para detalles y editar o eliminar una especifica
+@api_view(['GET','PUT','DELETE'])
+def reseñas_api_detalle(request,pk):
+    try:
+        reseña=Reseña.objects.get(pk=pk)
+    except Reseña.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method=="GET":# Viene por la info
+        serializer=ReseñaSerializer(reseña)
+        return Response(serializer.data)
+    elif request.method=="PUT":# Lo actualiza
+        serializer=ReseñaSerializer(reseña,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=="DELETE":# lo elimina
+        reseña.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
