@@ -53,3 +53,40 @@ def lista_usuarios(request):
 
     # Pasar los usuarios a html
     return render(request, 'usuarios/lista_usuarios.html', {'usuarios': usuarios, 'rol': rol})    
+from .serializers import PerfilSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+#get ver, post crear, put creo que es actualizar, delete borrar
+@api_view(['GET','POST'])
+def perfiles_api(request):
+    if request.method=="GET":#Respuesta para mostrar todos los registros
+        perfiles=Perfil.objects.all()
+        serializer=PerfilSerializer(perfiles,many=True)
+        return Response(serializer.data)
+    
+    elif request.method=="POST":#Al agregar solicitud es con POST
+        serializer=PerfilSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+#para detalles y editar o eliminar una especifica
+@api_view(['GET','PUT','DELETE'])
+def perfiles_api_detalle(request,pk):
+    try:
+        perfil=Perfil.objects.get(pk=pk)
+    except Perfil.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method=="GET":# Viene por la info
+        serializer=PerfilSerializer(perfil)
+        return Response(serializer.data)
+    elif request.method=="PUT":# Lo actualiza
+        serializer=PerfilSerializer(perfil,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=="DELETE":# lo elimina
+        perfil.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
