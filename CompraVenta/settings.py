@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'usuarios.apps.UsuariosConfig',
     'articulos',
     'reseñas',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

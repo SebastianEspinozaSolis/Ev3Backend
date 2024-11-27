@@ -57,3 +57,41 @@ def mis_articulos(request):
     publicaciones = Publicacion.objects.filter(vendedor=request.user)
 
     return render(request, 'articulos/mis_articulos.html', {'publicaciones': publicaciones})
+    
+from .serializers import PublicacionSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+#get ver, post crear, put creo que es actualizar, delete borrar
+@api_view(['GET','POST'])
+def publicaciones_api(request):
+    if request.method=="GET":#Respuesta para mostrar todos los registros
+        publicaciones=Publicacion.objects.all()
+        serializer=PublicacionSerializer(publicaciones,many=True)
+        return Response(serializer.data)
+    
+    elif request.method=="POST":#Al agregar solicitud es con POST
+        serializer=PublicacionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+#para detalles y editar o eliminar una especifica
+@api_view(['GET','PUT','DELETE'])
+def publicaciones_api_detalle(request,pk):
+    try:
+        publicacion=Publicacion.objects.get(pk=pk)
+    except Publicacion.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method=="GET":# Viene por la info
+        serializer=PublicacionSerializer(publicacion)
+        return Response(serializer.data)
+    elif request.method=="PUT":# Lo actualiza
+        serializer=PublicacionSerializer(publicacion,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=="DELETE":# lo elimina
+        publicacion.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
